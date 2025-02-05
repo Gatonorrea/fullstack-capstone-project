@@ -1,4 +1,9 @@
 /*jshint esversion: 8 */
+'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+'arrow function syntax (=>)' is only available in ES6 (use 'esversion: 6').
+'async functions' is only available in ES8 (use 'esversion: 8').
+'let' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+'template literal syntax' is only available in ES6 (use 'esversion: 6').
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');

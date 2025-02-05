@@ -1,21 +1,20 @@
 ---
 name: User Story
-about: This template defines a user story
+about: Describe a user story for this project
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
-**As a** [role]
-**I need** [function]
-**So that** [benefit]
+### **User Story**
+As a [type of user], I want [an action] so that [a benefit/a value].
 
-### Details and Assumptions
-    * [document what you know]
+### **Acceptance Criteria**
+- [ ] Criteria 1
+- [ ] Criteria 2
+- [ ] Criteria 3
 
-### Acceptance Criteria
-    gherkin
-    Given [some context]
-    When [certain action is taken]
-    Then [the outcome of action is observed]
+### **Definition of Done**
+- [ ] Task 1
+- [ ] Task 2
+- [ ] Task 3

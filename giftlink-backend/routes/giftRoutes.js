@@ -1,46 +1,53 @@
 const express = require('express');
 const router = express.Router();
-const connectToDatabase = require('../db'); // Import the database connection function
+const connectToDatabase = require('../models/db');
+const logger = require('../logger');
 
-// GET /api/gifts - Retrieve all gifts
-router.get('/', async (req, res) => {
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection('gifts');
-    const gifts = await collection.find({}).toArray();
-    res.json(gifts);
-  } catch (error) {
-    console.error('Error fetching gifts:', error);
-    res.status(500).json({ error: 'Failed to fetch gifts' });
-  }
+// Get all gifts
+router.get('/', async (req, res, next) => {
+    logger.info('/ called');
+    try {
+        const db = await connectToDatabase();
+
+        const collection = db.collection("gifts");
+        const gifts = await collection.find({}).toArray();
+        res.json(gifts);
+    } catch (e) {
+        logger.console.error('oops something went wrong', e)
+        next(e);
+    }
 });
 
-// GET /api/gifts/:id - Retrieve a specific gift by ID
-router.get('/:id', async (req, res) => {
-  try {
-    // Task 1: Connect to MongoDB and store connection in `db` constant
-    const db = await connectToDatabase();
+// Get a single gift by ID
+router.get('/:id', async (req, res, next) => {
+    try {
+        const db = await connectToDatabase();
+        const collection = db.collection("gifts");
+        const id = req.params.id;
+        const gift = await collection.findOne({ id: id });
 
-    // Task 2: Use the collection() method to retrieve the `gifts` collection
-    const collection = db.collection('gifts');
+        if (!gift) {
+            return res.status(404).send("Gift not found");
+        }
 
-    // Extract the ID from the request parameters
-    const id = req.params.id;
-
-    // Task 3: Find a specific gift by ID using the collection.findOne method
-    const gift = await collection.findOne({ _id: id });
-
-    // Check if the gift exists
-    if (!gift) {
-      return res.status(404).json({ error: 'Gift not found' });
+        res.json(gift);
+    } catch (e) {
+        next(e);
     }
+});
 
-    // Return the gift as a JSON response
-    res.json(gift);
-  } catch (error) {
-    console.error('Error fetching gift by ID:', error);
-    res.status(500).json({ error: 'Failed to fetch gift' });
-  }
+
+// Add a new gift
+router.post('/', async (req, res, next) => {
+    try {
+        const db = await connectToDatabase();
+        const collection = db.collection("gifts");
+        const gift = await collection.insertOne(req.body);
+
+        res.status(201).json(gift.ops[0]);
+    } catch (e) {
+        next(e);
+    }
 });
 
 module.exports = router;
